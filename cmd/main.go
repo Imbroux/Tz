@@ -15,5 +15,8 @@ func main() {
 	repository.CreateUsersTable()
 
 	http.HandleFunc("/api/user/register", handler.CreateUser)
+	http.HandleFunc("/api/user/login", handler.AuthUser)
+	http.Handle("/api/user/order", handler.JWTMiddleware(http.HandlerFunc(handler.Order)))
+
 	http.ListenAndServe(":8080", nil)
 }
