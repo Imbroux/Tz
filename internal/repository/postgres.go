@@ -16,19 +16,3 @@ func InitDB(dataSourceName string) {
 
 	log.Println("Database connection established.")
 }
-
-func CreateUsersTable() {
-	createTableQuery := `
-  CREATE TABLE IF NOT EXISTS users (
-   id SERIAL PRIMARY KEY,
-   login TEXT UNIQUE NOT NULL,
-   password TEXT NOT NULL
-  );
- `
-
-	_, err := DB.Exec(createTableQuery)
-	if err != nil {
-		panic(err)
-	}
-
-}

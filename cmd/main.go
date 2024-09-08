@@ -12,11 +12,11 @@ func main() {
 	dataSourceName := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",
 		`localhost`, `postgres`, `625325`, `users`)
 	repository.InitDB(dataSourceName)
-	repository.CreateUsersTable()
 
 	http.HandleFunc("/api/user/register", handler.CreateUser)
 	http.HandleFunc("/api/user/login", handler.AuthUser)
-	http.Handle("/api/user/order", handler.JWTMiddleware(http.HandlerFunc(handler.Order)))
+	http.Handle("/protected-endpoint", handler.JWTMiddleware(http.HandlerFunc(handler.ProtectedEndpoint)))
+	http.Handle("/api/user/order", handler.JWTMiddleware(http.HandlerFunc(handler.CreateOrder)))
 
 	http.ListenAndServe(":8080", nil)
 }

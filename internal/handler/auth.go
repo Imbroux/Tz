@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -90,7 +91,7 @@ func AuthUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func GenerateJWT(login string) (string, error) {
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(5 * time.Hour)
 	claims := &Claims{
 		Login: login,
 		StandardClaims: jwt.StandardClaims{
@@ -109,6 +110,10 @@ func JWTMiddleware(next http.Handler) http.Handler {
 		if tokenString == "" {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
+		}
+
+		if strings.HasPrefix(tokenString, "Bearer ") {
+			tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 		}
 
 		claims := &Claims{}
