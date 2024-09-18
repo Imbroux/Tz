@@ -5,18 +5,25 @@ import (
 	"Tz/internal/repository"
 	"fmt"
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 	"net/http"
+	"os"
 )
 
 func main() {
+	handler.InitZap()
+	router := handler.InitRoutes()
+
+	if err := godotenv.Load(); err != nil {
+		handler.Logger.Error("error loading env")
+	}
+
 	dataSourceName := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",
-		`localhost`, `postgres`, `625325`, `users`)
+		`localhost`, `postgres`, os.Getenv("DB_PASSWORD"), `postgres`)
 	repository.InitDB(dataSourceName)
 
-	http.HandleFunc("/api/user/register", handler.CreateUser)
-	http.HandleFunc("/api/user/login", handler.AuthUser)
-	http.Handle("/protected-endpoint", handler.JWTMiddleware(http.HandlerFunc(handler.ProtectedEndpoint)))
-	http.Handle("/api/user/order", handler.JWTMiddleware(http.HandlerFunc(handler.CreateOrder)))
-
-	http.ListenAndServe(":8080", nil)
+	if err := http.ListenAndServe(":8080", router); err != nil {
+		handler.Logger.Fatal("Сервер не запустился", zap.Error(err))
+	}
 }

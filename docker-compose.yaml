@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 625325
+      POSTGRES_DB: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - R:/ProjectsGo/Tz/db:/var/lib/postgresql/data
+
+#  migrate -path ./migrations/ -database 'postgres://postgres:625325@localhost:5432/users?sslmode=disable' up
+#  docker exec -it 67839f4a1443 psql -U users

@@ -3,5 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/internal/handler/auth.go" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/internal/repository/postgres.go" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/20240913135044_create_users_table.down.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/20240913135044_create_users_table.up.sql" dialect="GenericSQL" />
   </component>
 </project>
